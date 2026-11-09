@@ -30,7 +30,8 @@ messages.txt
 *.log
 
 # Angular / Node
-node_modules/
+# Ignore dependencies at any level of the project.
+**/node_modules/
 dist/
 .angular/
 coverage/
