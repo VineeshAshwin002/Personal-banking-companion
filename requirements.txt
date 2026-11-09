@@ -1,0 +1,11 @@
+Flask
+flask-cors
+fastapi
+uvicorn
+python-dotenv
+pydantic
+typing-extensions
+langchain
+langchain-core
+langchain-openai
+langgraph
