@@ -31,7 +31,9 @@ messages.txt
 
 # Angular / Node
 # Ignore dependencies at any level of the project.
+node_modules/
 **/node_modules/
+**/node_modules/**
 dist/
 .angular/
 coverage/
