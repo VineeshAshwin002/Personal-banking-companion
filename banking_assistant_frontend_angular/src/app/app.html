@@ -1,0 +1,102 @@
+<main class="app-shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">B</div>
+      <div>
+        <div class="brand-title">Banking Assistant</div>
+        <div class="brand-subtitle">Multi-agent support</div>
+      </div>
+    </div>
+
+    <div class="sidebar-label">SUGGESTED QUESTIONS</div>
+    @for (suggestion of suggestions; track suggestion.question) {
+      <button
+        class="suggestion"
+        type="button"
+        (click)="useSuggestion(suggestion.question)"
+      >
+        {{ suggestion.label }}
+      </button>
+    }
+
+    <div class="sidebar-note">
+      Do not enter PINs, passwords, OTPs, or full card details.
+    </div>
+  </aside>
+
+  <section class="chat-panel">
+    <header class="chat-header">
+      <div class="avatar">B</div>
+      <div class="header-copy">
+        <h1>How can I help you today?</h1>
+        <p><span class="status-dot"></span> Banking assistant</p>
+      </div>
+      <span class="connection-status">{{ connectionStatus() }}</span>
+    </header>
+
+    <div #messagesContainer class="messages" aria-live="polite">
+      @for (message of messages(); track $index) {
+        <div class="message" [class.user]="message.role === 'user'">
+          <div class="message-avatar">
+            {{ message.role === 'user' ? 'You' : 'B' }}
+          </div>
+          <div class="bubble">{{ message.text }}</div>
+        </div>
+      }
+    </div>
+
+    <div class="typing" [class.hidden]="!isBusy()">
+      <span></span><span></span><span></span> Assistant is responding...
+    </div>
+
+    <form class="composer" (ngSubmit)="submitMessage()">
+      <label class="customer-field">
+        <span>Customer ID <strong>(required)</strong></span>
+        <input
+          #customerIdInput
+          [(ngModel)]="customerId"
+          name="customerId"
+          type="text"
+          placeholder="e.g. CUS1001"
+          autocomplete="off"
+          required
+          [class.invalid]="customerIdRequired()"
+          [attr.aria-invalid]="customerIdRequired()"
+          (input)="onCustomerIdInput()"
+        />
+        @if (customerIdRequired()) {
+          <span class="customer-error">Enter your customer ID before sending.</span>
+        }
+      </label>
+      <div class="input-row">
+        <textarea
+          #messageInput
+          [(ngModel)]="messageInputValue"
+          name="message"
+          rows="1"
+          placeholder="Ask a banking question..."
+          aria-label="Message"
+          required
+          [disabled]="isBusy()"
+          (input)="onMessageInput()"
+          (keydown)="onMessageKeydown($event)"
+        ></textarea>
+        <button
+          id="send-button"
+          type="submit"
+          aria-label="Send message"
+          [disabled]="isBusy()"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 12 20 4l-5 16-3-6-8-2Zm8 2 8-10" />
+          </svg>
+          <span>{{ isBusy() ? 'Sending...' : 'Send' }}</span>
+        </button>
+      </div>
+      <div class="composer-footer">
+        <span>Enter to send · Shift+Enter for a new line</span>
+        <span>Local development</span>
+      </div>
+    </form>
+  </section>
+</main>
